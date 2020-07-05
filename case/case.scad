@@ -3,13 +3,21 @@ include <lib.scad>;
 $fn = 64;
 
 module upper_body() {
-    r = 19.2/6;
-    lb = [for (t = [0:1:100]) cubic_bezier(t/100, [r, 0], [0, 0], [0, 0], [0, r])];
-    lt = [for (t = [0:1:100]) cubic_bezier(t/100, [0, 19.2*4.5-r], [0, 19.2*4.5], [0, 19.2*4.5], [r, 19.2*4.5])];
-    rt = [for (t = [0:1:100]) cubic_bezier(t/100, [19.2*(6+2/6)-r, 19.2*4.5], [19.2*(6+2/6), 19.2*4.5], [19.2*(6+2/6), 19.2*4.5], [19.2*(6+2/6), 19.2*4.5-r])];
-    rb = [for (t = [0:1:100]) cubic_bezier(t/100, [19.2*(6+2/6), r], [19.2*(6+2/6), 0], [19.2*(6+2/6), 0], [19.2*(6+2/6)-r, 0])];
+    r = 19.2 / 6;
     linear_extrude(20) {
-        polygon(concat(lb, lt, rt, rb));
+        chamfered_square([19.2*(6+2/6), 19.2*4.5], r);
+        translate([19.2*(6+2/6)-r, 19.2*4.5-r]) rotate(0) {
+            continuous_corner(r);
+        }
+        translate([r, 19.2*4.5-r]) rotate(90) {
+            continuous_corner(r);
+        }
+        translate([r, r]) rotate(180) {
+            continuous_corner(r);
+        }
+        translate([19.2*(6+2/6)-r, r]) rotate(270) {
+            continuous_corner(r);
+        }
     }
 }
 
