@@ -12,6 +12,16 @@ module fillet(r) {
     }
 }
 
+module chamfered_square(size, c) {
+    difference() {
+        square(size);
+        polygon([[0, 0], [0, c], [c, 0]]);
+        polygon([[0, size[1]], [c, size[1]], [0, size[1] - c]]);
+        polygon([[size[0], size[1]], [size[0], size[1] - c], [size[0] - c, size[1]]]);
+        polygon([[size[0], 0], [size[0], c], [size[0] - c, 0]]);
+    }
+}
+
 module continuous_corner(r, a = 90) {
     n = $fn * a / 360;
     arc = [for (i = [n / 3 : n * 2 / 3]) [r * cos(i * (a / n)), r * sin(i * (a / n))]];
