@@ -4,18 +4,17 @@ $fn = 64;
 
 module upper_body() {
     r = 19.2 / 6;
-    linear_extrude(20) {
-        chamfered_square([19.2*(6+2/6), 19.2*4.5], r);
-        translate([19.2*(6+2/6)-r, 19.2*4.5-r]) rotate(0) {
+    linear_extrude(20) hull() {
+        translate([19.2*(6+2/6), 19.2*4.5]) rotate(0) {
             continuous_corner(r);
         }
-        translate([r, 19.2*4.5-r]) rotate(90) {
+        translate([0, 19.2*4.5]) rotate(90) {
             continuous_corner(r);
         }
-        translate([r, r]) rotate(180) {
+        translate([0, 0]) rotate(180) {
             continuous_corner(r);
         }
-        translate([19.2*(6+2/6)-r, r]) rotate(270) {
+        translate([19.2*(6+2/6), 0]) rotate(270) {
             continuous_corner(r);
         }
     }
