@@ -14,6 +14,8 @@ function cum_sum(v, _i=0,  _a=[]) =
 
 function reverse(v) = [for (i = [0 : len(v)-1]) v[len(v)-1-i]];
 
+function degree2radian(d) = d * PI / 180;
+
 function sin_radian(d) = sin(180 * d / PI);
 function cos_radian(d) = cos(180 * d / PI);
 
@@ -40,14 +42,19 @@ module chamfered_square(size, c) {
 }
 
 // Continuous 90' Corner
-module continuous_corner(r) {
+module continuous_corner(r, a = 90, circle_a=45) {
     n = $fn;
+    clothoid_a = (a - circle_a) / 2;
+    l = sqrt(degree2radian(clothoid_a * 2));
 
-    _arc = [for (i = [n : 2 * n]) [cos(30 * i / n), sin(30 * i / n)]];
-    arc = [for (i = _arc) r * i];
+    _arc = [for (i = [0 : n]) let (t = clothoid_a + circle_a * i / n) [cos(t), sin(t)]];
+    arc = _arc * r;
 
-    dt = sqrt(PI / 3) / n;
-    c1 = cum_sum(concat([[0, 0]], reverse([for (t = [0 : dt : sqrt(PI/3)]) clothoid(t) * dt]))) * sqrt(PI/3) * r;
+    dt = l / n;
+
+    __c1 = [for (t = [0 : dt : l]) clothoid(t)] * dt;
+    _c1 = cum_sum(concat([[0, 0]], reverse(__c1)));
+    c1 = _c1 * l * r;
 
     d = arc[0][0] + (c1[len(c1)-1] - c1[0])[1];
     translate([-d, -d]) {
