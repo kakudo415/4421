@@ -1,31 +1,36 @@
 include <lib.scad>;
 
-$fn = 32;
+$fn = 64;
 
 kp = 19.2;
 
-w = kp * 6.5;
-h = kp * 5.5;
-c = [w, h] / 2;
+l = kp * 6.5;
+w = kp * 5.5;
+h = 20;
+c = [l, w] / 2;
 
 // SKETCHES
 
 module CASE_OUTER() {
     r = kp / 4;
     hull() {
-        translate([w, h]) rotate(0) {
+        translate([l, w]) rotate(0) {
             continuous_corner(r);
         }
-        translate([0, h]) rotate(90) {
+        translate([0, w]) rotate(90) {
             continuous_corner(r);
         }
         translate([0, 0]) rotate(180) {
             continuous_corner(r);
         }
-        translate([w, 0]) rotate(270) {
+        translate([l, 0]) rotate(270) {
             continuous_corner(r);
         }
     }
+}
+
+module CASE_INNER() {
+    translate(c) smooth(3) square(kp*[6, 4]+[4, 4], center=true);
 }
 
 module UPPER_CASE_CUTOUT() {
@@ -48,8 +53,30 @@ module SCREW_HOLE() {
     translate(c) {
         for (i = [-1:1]) {
             translate([kp*2.5*i, 0]) {
-                translate([0, h/2-(h-kp*4-4)/4]) circle(d=3.5);
-                translate([0, -h/2+(h-kp*4-4)/4]) circle(d=3.5);
+                translate([0, w/2-(w-kp*4-4)/4]) circle(d=2.4);
+                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=2.4);
+            }
+        }
+    }
+}
+
+module INSERT_NUT_HOLE() {
+    translate(c) {
+        for (i = [-1:1]) {
+            translate([kp*2.5*i, 0]) {
+                translate([0, w/2-(w-kp*4-4)/4]) circle(d=3.5);
+                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=3.5);
+            }
+        }
+    }
+}
+
+module SCREW_COUNTERBORE() {
+    translate(c) {
+        for (i = [-1:1]) {
+            translate([kp*2.5*i, 0]) {
+                translate([0, w/2-(w-kp*4-4)/4]) circle(d=5);
+                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=5);
             }
         }
     }
@@ -69,14 +96,39 @@ module PLATE() {
     }
 }
 
-module upper_case() {
-    render(4) difference() {
-        linear_extrude(20) CASE_OUTER();
-        linear_extrude(20) UPPER_CASE_CUTOUT();
-        linear_extrude(20 - 6.6) PLATE_RECESS();
-        linear_extrude(15) SCREW_HOLE();
+module PLATE_STAY() {
+    for (i = [-1, 1], j = [-1, 1]) {
+        translate(c+[1.25*kp*i, (2*kp+3.5)*j]) {
+            hull() {
+                translate([-0.75*kp+1.5, 0]) circle(d=3);
+                translate([0.75*kp-1.5, 0]) circle(d=3);
+            }
+        }
     }
 }
 
-upper_case();
-translate([0, 0, 20 - 6.6 - 1.5 - 1]) linear_extrude(1.5) PLATE();
+module upper_case() {
+    render(4) difference() {
+        linear_extrude(h) CASE_OUTER();
+        linear_extrude(h) UPPER_CASE_CUTOUT();
+        linear_extrude(h - 6.6 + 1) PLATE_RECESS();
+        linear_extrude(h-3) INSERT_NUT_HOLE();
+        linear_extrude(h - 6.6 - 1.5 - 5 + 3.2/2) square([l, w]);
+    }
+}
+
+module lower_case() {
+    render(4) difference() {
+        union() {
+            linear_extrude(h - 6.6 - 1.5 - 5 + 3.2/2) CASE_OUTER();
+            linear_extrude(h - 6.6 - 1.5 - 1) PLATE_STAY();
+        }
+        linear_extrude(h) SCREW_HOLE();
+        linear_extrude(h - 6.6 - 1.5 - 5 + 3.2/2 - 3) SCREW_COUNTERBORE();
+        translate([0, 0, 3]) linear_extrude(h - 6.6 - 1.5 - 5 + 3.2/2 - 3) CASE_INNER();
+    }
+}
+
+!upper_case();
+translate([0, 0, h - 6.6 - 1.5]) linear_extrude(1.5) PLATE();
+lower_case();
