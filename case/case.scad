@@ -36,8 +36,8 @@ module CASE_INNER() {
 module UPPER_CASE_CUTOUT() {
     translate(c) smooth(1) fillet(1) difference() {
         square(kp*[6, 4], center=true);
-        translate([-3, -2]*kp) square(kp*[1, 1]);
-        translate([0, -2]*kp) square(kp*[1, 1]);
+        translate([2, -2]*kp) square(kp*[1, 1]);
+        translate([-1, -2]*kp) square(kp*[1, 1]);
     }
 }
 
@@ -129,6 +129,11 @@ module lower_case() {
     }
 }
 
-!upper_case();
-translate([0, 0, h - 6.6 - 1.5]) linear_extrude(1.5) PLATE();
-lower_case();
+module case() {
+    upper_case();
+    translate([0, 0, h - 6.6 - 1.5]) linear_extrude(1.5) PLATE();
+    lower_case();
+}
+
+translate([10, 0, 0]) case();
+translate([-10, 0, 0]) mirror([1, 0, 0]) case();
