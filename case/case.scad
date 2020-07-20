@@ -1,105 +1,82 @@
 include <lib.scad>;
 
-$fn = 64;
+$fn = 32;
 
-// UPPER CASE
+kp = 19.2;
 
-module upper_body() {
-    r = 19.2 / 4;
-    linear_extrude(20) hull() {
-        translate([19.2*6.5, 19.2*5]) rotate(0) {
+w = kp * 6.5;
+h = kp * 5.5;
+c = [w, h] / 2;
+
+// SKETCHES
+
+module CASE_OUTER() {
+    r = kp / 4;
+    hull() {
+        translate([w, h]) rotate(0) {
             continuous_corner(r);
         }
-        translate([0, 19.2*5]) rotate(90) {
+        translate([0, h]) rotate(90) {
             continuous_corner(r);
         }
         translate([0, 0]) rotate(180) {
             continuous_corner(r);
         }
-        translate([19.2*6.5, 0]) rotate(270) {
+        translate([w, 0]) rotate(270) {
             continuous_corner(r);
         }
     }
 }
 
-module key_cutout() {
-    linear_extrude(40) {
-        smooth(1) fillet(1) {
-            translate([0, 19.2]) {
-                square([19.2 * 6, 19.2 * 3]);
+module UPPER_CASE_CUTOUT() {
+    translate(c) smooth(1) fillet(1) difference() {
+        square(kp*[6, 4], center=true);
+        translate([-3, -2]*kp) square(kp*[1, 1]);
+        translate([0, -2]*kp) square(kp*[1, 1]);
+    }
+}
+
+module PLATE_RECESS() {
+    translate(c) fillet(1) {
+        smooth(3) square(kp*[6, 4]+[4, 4], center=true);
+        translate([1.25*kp, 0]) smooth(2.5) square([1.5, 4]*kp+[2, 12], center=true);
+        translate([-1.25*kp, 0]) smooth(2.5) square([1.5, 4]*kp+[2, 12], center=true);
+    }
+}
+
+module SCREW_HOLE() {
+    translate(c) {
+        for (i = [-1:1]) {
+            translate([kp*2.5*i, 0]) {
+                translate([0, h/2-(h-kp*4-4)/4]) circle(d=3.5);
+                translate([0, -h/2+(h-kp*4-4)/4]) circle(d=3.5);
             }
-            translate([19.2, 0]) {
-                square([19.2 * 2, 19.2]);
-            }
-            translate([19.2 * 4, 0]) {
-                square([19.2 * 2, 19.2]);
-            }
+        }
+    }
+}
+
+module PLATE() {
+    key_positions = [for (i=[-2.5:2.5], j=[-1.5:1.5]) [i, j]*kp];
+    translate(c) difference() {
+        fillet(1) {
+            smooth(2) square(kp*[6, 4]+[2, 2], center=true);
+            translate([1.25*kp, 0]) smooth(1.5) square([1.5, 4]*kp+[0, 10], center=true);
+            translate([-1.25*kp, 0]) smooth(1.5) square([1.5, 4]*kp+[0, 10], center=true);
+        }
+        for (key_position = key_positions) {
+            translate(key_position) square([14, 14], center=true);
         }
     }
 }
 
 module upper_case() {
-    render(convexity = 10) difference() {
-        translate([0, 0, 0]) {
-            upper_body();
-        }
-        translate([19.2 / 4, 19.2 / 2]) {
-            key_cutout();
-        }
-        translate([19.2 / 4, 19.2 / 2] - [2, 2]) {
-            linear_extrude(20 - 6.6 - 1 + 1) smooth(3) fillet(3) square([19.2 * 6, 19.2 * 4] + [2, 2] + [2, 2]);
-        }
-        translate([1, 2] * 19.2 / 4 - [2, 2]) {
-            linear_extrude(20 - 6.6 - 1 + 1) {
-                smooth(2) fillet(1) {
-                    translate([19.2 * 1 + 1, -4]) {
-                        square([19.2 * 1.5, 19.2 * 4 + 2 + 8] + [2, 2]);
-                    }
-                    translate([19.2 * 3.5 + 1, -4]) {
-                        square([19.2 * 1.5, 19.2 * 4 + 2 + 8] + [2, 2]);
-                    }
-                    translate([19.2 / 2 + 1, 0]) {
-                        square([19.2 * 5, 19.2 * 4 + 4]);
-                    }
-                }
-            }
-        }
+    render(4) difference() {
+        linear_extrude(20) CASE_OUTER();
+        linear_extrude(20) UPPER_CASE_CUTOUT();
+        linear_extrude(20 - 6.6) PLATE_RECESS();
+        linear_extrude(15) SCREW_HOLE();
     }
 }
 
-// PLATE
-
-module plate() {
-    key_positions = [for (i = [0:5], j = [0:3]) [i, j] * 19.2];
-
-    translate([1, 2] * 19.2 / 4 - [1, 1]) {
-        difference() {
-            smooth(1.5) fillet(1.5) union() {
-                square([6, 4] * 19.2 + [2, 2]);
-                translate([19.2 * 1 + 1, -4]) {
-                    square([19.2 * 1.5, 19.2 * 4 + 2 + 8]);
-                }
-                translate([19.2 * 3.5 + 1, -4]) {
-                    square([19.2 * 1.5, 19.2 * 4 + 2 + 8]);
-                }
-            }
-            translate([1, 1] * (19.2 - 14) / 2 + [1, 1]) {
-                for (key_position = key_positions) {
-                    translate(key_position) square([14, 14]);
-                }
-            }
-        }
-    }
-}
-
-// LOWER CASE
-
-module lower_case() {}
-
-// MAIN
-
-color("Burlywood") upper_case();
-
-color("silver") translate([0, 0, 20 - 6.6 - 1.5 - 1]) linear_extrude(1.5) plate();
-
-lower_case();
+upper_case();
+translate([0, 0, 20 - 6.6 - 1.5 - 1]) linear_extrude(1.5) PLATE();
