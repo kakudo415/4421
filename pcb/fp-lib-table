@@ -1,0 +1,6 @@
+(fp_lib_table
+  (lib (name Cherry_MX)(type KiCad)(uri ${KIPRJMOD}/Cherry_MX.pretty)(options "")(descr ""))
+  (lib (name USB_Type-C)(type KiCad)(uri ${KIPRJMOD}/USB_Type-C.pretty)(options "")(descr ""))
+  (lib (name Crystal)(type KiCad)(uri ${KIPRJMOD}/Crystal.pretty)(options "")(descr ""))
+  (lib (name MCU)(type KiCad)(uri ${KIPRJMOD}/MCU.pretty)(options "")(descr ""))
+)
