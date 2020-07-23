@@ -6,7 +6,7 @@ kp = 19.2;
 
 l = kp * 6.5;
 w = kp * 5.5;
-h = 20;
+h = 24;
 c = [l, w] / 2;
 
 // SKETCHES
@@ -107,6 +107,12 @@ module PLATE_STAY() {
     }
 }
 
+module PCB() {
+    translate(c) {
+        smooth(1) square(kp*[6, 4], center=true);
+    }
+}
+
 module upper_case() {
     render(4) difference() {
         linear_extrude(h) CASE_OUTER();
@@ -132,6 +138,7 @@ module lower_case() {
 module case() {
     upper_case();
     translate([0, 0, h - 6.6 - 1.5]) linear_extrude(1.5) PLATE();
+    translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) linear_extrude(1.6) PCB();
     lower_case();
 }
 
