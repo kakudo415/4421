@@ -1,0 +1,10 @@
+(module 2012M (layer F.Cu) (tedit 5F1C4E3E)
+  (fp_text reference REF** (at 0 1.5) (layer F.SilkS)
+    (effects (font (size 0.8 0.8) (thickness 0.1)))
+  )
+  (fp_text value 2012M (at 0 -1.5) (layer F.Fab) hide
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
+  (pad 1 smd roundrect (at -1 0) (size 1.4 1.4) (drill (offset -0.1 0)) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.1))
+  (pad 2 smd roundrect (at 1 0) (size 1.4 1.4) (drill (offset 0.1 0)) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.1))
+)
