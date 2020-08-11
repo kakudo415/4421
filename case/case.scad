@@ -183,10 +183,14 @@ module plate() {
     }
 }
 
-module upper_case() {
+module upper_case(right) {
     color("olivedrab") render(4) difference() {
         linear_extrude(h) CASE_OUTER();
-        linear_extrude(h) UPPER_CASE_CUTOUT();
+        if (right) {
+            linear_extrude(h) UPPER_CASE_CUTOUT();
+        } else {
+            translate([6.5*kp, 0, h]) rotate(180, [0, 1, 0]) linear_extrude(h) UPPER_CASE_CUTOUT();
+        }
         linear_extrude(h - 6.6 + 1) PLATE_RECESS();
         linear_extrude(h-3) INSERT_NUT_HOLE();
         linear_extrude(ch) square([l, w]);
@@ -229,14 +233,14 @@ module lower_case(right) {
 }
 
 translate([10, 0, 0]) {
-    upper_case();
+    upper_case(true);
     translate([0, 0, h - 6.6 - 1.5]) plate();
     translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(true);
     lower_case(true);
 }
 
 translate([-10-l, 0, 0]) {
-    upper_case();
+    upper_case(false);
     translate([0, 0, h - 6.6 - 1.5]) plate();
     translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(false);
     lower_case(false);
