@@ -214,16 +214,14 @@ module lower_case(right) {
                     translate([3.25*kp, 0, 10]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
                 }
             }
-            if (right) {
-                hull() {
-                    translate([3.25*kp, 21.37, -1.605]) hull() {
-                        translate([0, 2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                        translate([0, -2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                    }
-                    translate([3.25*kp, 21.37, 10]) hull() {
-                        translate([0, 2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                        translate([0, -2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                    }
+            hull() {
+                translate([3.25*kp, 21.37, -1.605]) hull() {
+                    translate([0, 2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                    translate([0, -2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                }
+                translate([3.25*kp, 21.37, 10]) hull() {
+                    translate([0, 2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                    translate([0, -2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
                 }
             }
         }
