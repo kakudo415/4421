@@ -74,7 +74,7 @@ U 1 1 5F192896
 P 8800 5700
 F 0 "J2" H 8757 6025 50  0000 C CNN
 F 1 "AudioJack4" H 8757 5934 50  0000 C CNN
-F 2 "" H 8800 5700 50  0001 C CNN
+F 2 "Phone_Connector:MJ-4PP-9" H 8800 5700 50  0001 C CNN
 F 3 "~" H 8800 5700 50  0001 C CNN
 	1    8800 5700
 	1    0    0    -1  
@@ -90,9 +90,9 @@ F 3 "" H 9000 5600 50  0001 C CNN
 	1    9000 5600
 	0    -1   -1   0   
 $EndComp
-Text GLabel 9000 5700 2    50   Input ~ 0
-SDA
 Text GLabel 9000 5800 2    50   Input ~ 0
+SDA
+Text GLabel 9000 5700 2    50   Input ~ 0
 SCL
 $Comp
 L power:VCC #PWR014
@@ -913,25 +913,25 @@ Text GLabel 4700 1300 1    50   Input ~ 0
 C4
 Text GLabel 5300 1300 1    50   Input ~ 0
 C5
-Text GLabel 9600 1500 2    50   Input ~ 0
+Text GLabel 9600 2400 2    50   Input ~ 0
 C0
-Text GLabel 9600 1600 2    50   Input ~ 0
+Text GLabel 9600 2100 2    50   Input ~ 0
 C1
-Text GLabel 9600 1700 2    50   Input ~ 0
-C2
-Text GLabel 9600 1800 2    50   Input ~ 0
-C3
-Text GLabel 9600 1900 2    50   Input ~ 0
-C4
 Text GLabel 9600 2000 2    50   Input ~ 0
+C2
+Text GLabel 9600 4400 2    50   Input ~ 0
+C3
+Text GLabel 9600 4100 2    50   Input ~ 0
+C4
+Text GLabel 9600 4200 2    50   Input ~ 0
 C5
 Text GLabel 9600 3900 2    50   Input ~ 0
 R0
-Text GLabel 9600 4000 2    50   Input ~ 0
+Text GLabel 9600 1900 2    50   Input ~ 0
 R1
-Text GLabel 9600 4100 2    50   Input ~ 0
+Text GLabel 9600 3400 2    50   Input ~ 0
 R2
-Text GLabel 9600 4200 2    50   Input ~ 0
+Text GLabel 9600 3300 2    50   Input ~ 0
 R3
 $Comp
 L power:VCC #PWR02
@@ -981,17 +981,12 @@ Wire Wire Line
 	6500 1500 6500 1600
 Wire Wire Line
 	7000 1500 7000 1600
-NoConn ~ 9600 2100
 NoConn ~ 9600 2200
 NoConn ~ 9600 2900
 NoConn ~ 9600 3000
 NoConn ~ 9600 3100
 NoConn ~ 9600 3200
-NoConn ~ 9600 3300
-NoConn ~ 9600 3400
 NoConn ~ 9600 3700
-NoConn ~ 9600 4300
-NoConn ~ 9600 4400
 $Comp
 L power:VCC #PWR05
 U 1 1 5F2D37B3
@@ -1272,7 +1267,6 @@ Text GLabel 7700 4450 2    50   Input ~ 0
 D+
 Text GLabel 7700 4550 2    50   Input ~ 0
 D-
-NoConn ~ 9600 2400
 NoConn ~ 9600 2500
 $Comp
 L Connector:AudioJack4 J3
@@ -1280,7 +1274,7 @@ U 1 1 5F248BA8
 P 9800 5700
 F 0 "J3" H 9757 6025 50  0000 C CNN
 F 1 "AudioJack4" H 9757 5934 50  0000 C CNN
-F 2 "" H 9800 5700 50  0001 C CNN
+F 2 "Phone_Connector:MJ-4PP-9" H 9800 5700 50  0001 C CNN
 F 3 "~" H 9800 5700 50  0001 C CNN
 	1    9800 5700
 	1    0    0    -1  
@@ -1296,9 +1290,9 @@ F 3 "" H 10000 5600 50  0001 C CNN
 	1    10000 5600
 	0    -1   -1   0   
 $EndComp
-Text GLabel 10000 5700 2    50   Input ~ 0
-SDA
 Text GLabel 10000 5800 2    50   Input ~ 0
+SDA
+Text GLabel 10000 5700 2    50   Input ~ 0
 SCL
 $Comp
 L power:VCC #PWR015
@@ -1422,4 +1416,6 @@ Wire Wire Line
 	6500 2300 6500 2400
 Wire Wire Line
 	6500 2600 6500 2700
+NoConn ~ 9600 4300
+NoConn ~ 9600 4000
 $EndSCHEMATC

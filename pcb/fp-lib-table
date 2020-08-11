@@ -4,4 +4,5 @@
   (lib (name Crystal)(type KiCad)(uri ${KIPRJMOD}/Crystal.pretty)(options "")(descr ""))
   (lib (name MCU)(type KiCad)(uri ${KIPRJMOD}/MCU.pretty)(options "")(descr ""))
   (lib (name SMD)(type KiCad)(uri ${KIPRJMOD}/SMD.pretty)(options "")(descr ""))
+  (lib (name Phone_Connector)(type KiCad)(uri ${KIPRJMOD}/Phone_Connector.pretty)(options "")(descr ""))
 )
