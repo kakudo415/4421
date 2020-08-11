@@ -54,19 +54,8 @@ module SCREW_HOLE() {
     translate(c) {
         for (i = [-1:1]) {
             translate([kp*2.5*i, 0]) {
-                translate([0, w/2-(w-kp*4-4)/4]) circle(d=2.4);
-                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=2.4);
-            }
-        }
-    }
-}
-
-module INSERT_NUT_HOLE() {
-    translate(c) {
-        for (i = [-1:1]) {
-            translate([kp*2.5*i, 0]) {
-                translate([0, w/2-(w-kp*4-4)/4]) circle(d=3.5);
-                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=3.5);
+                translate([0, w/2-(w-kp*4-4)/4]) circle(d=3.4);
+                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=3.4);
             }
         }
     }
@@ -76,8 +65,8 @@ module SCREW_COUNTERBORE() {
     translate(c) {
         for (i = [-1:1]) {
             translate([kp*2.5*i, 0]) {
-                translate([0, w/2-(w-kp*4-4)/4]) circle(d=5);
-                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=5);
+                translate([0, w/2-(w-kp*4-4)/4]) circle(d=6);
+                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=6);
             }
         }
     }
@@ -184,7 +173,7 @@ module plate() {
 }
 
 module upper_case(right) {
-    color("olivedrab") render(4) difference() {
+    color("ivory") render(4) difference() {
         linear_extrude(h) CASE_OUTER();
         if (right) {
             linear_extrude(h) UPPER_CASE_CUTOUT();
@@ -192,19 +181,20 @@ module upper_case(right) {
             translate([6.5*kp, 0, h]) rotate(180, [0, 1, 0]) linear_extrude(h) UPPER_CASE_CUTOUT();
         }
         linear_extrude(h - 6.6 + 1) PLATE_RECESS();
-        linear_extrude(h-3) INSERT_NUT_HOLE();
+        linear_extrude(h) SCREW_HOLE();
+        translate([0, 0, h-5]) linear_extrude(5) SCREW_COUNTERBORE();
         linear_extrude(ch) square([l, w]);
     }
 }
 
 module lower_case(right) {
-    color("olivedrab") render(4) difference() {
+    color("ivory") render(4) difference() {
         union() {
             linear_extrude(ch) CASE_OUTER();
             linear_extrude(h - 6.6 - 1.5 - 1) PLATE_STAY();
         }
         linear_extrude(h) SCREW_HOLE();
-        linear_extrude(ch - 3) SCREW_COUNTERBORE();
+        linear_extrude(5) SCREW_COUNTERBORE();
         translate([0, 0, 3]) linear_extrude(ch - 3) CASE_INNER();
         translate(c+[0, 0, h - 6.6 - 1.5 - 5 - 1.6]) {
             if (right) {
