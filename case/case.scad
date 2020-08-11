@@ -146,14 +146,17 @@ module type_c_31_m_12() {
     }
 }
 
-module pcb() {
+module pcb(right) {
     color("darkgreen") linear_extrude(1.6) PCB();
     translate(c+[0, 0, -5]) {
-        translate([-kp*3, 0]) rotate(90) mj4pp9();
-        translate([kp*3, 0]) rotate(270) mj4pp9();
+        if (right) {
+            translate([-kp*3-2, 0]) rotate(90) mj4pp9();
+        } else {
+            translate([kp*3+2, 0]) rotate(270) mj4pp9();
+        }
     }
     translate(c+[0, 0, -3.21]) {
-        translate([-kp*3, 21.37]) rotate(90) type_c_31_m_12();
+        translate([kp*3, 21.37]) rotate(270) type_c_31_m_12();
     }
 }
 
@@ -190,7 +193,7 @@ module upper_case() {
     }
 }
 
-module lower_case() {
+module lower_case(right) {
     color("olivedrab") render(4) difference() {
         union() {
             linear_extrude(ch) CASE_OUTER();
@@ -200,30 +203,43 @@ module lower_case() {
         linear_extrude(ch - 3) SCREW_COUNTERBORE();
         translate([0, 0, 3]) linear_extrude(ch - 3) CASE_INNER();
         translate(c+[0, 0, h - 6.6 - 1.5 - 5 - 1.6]) {
-            hull() {
-                translate([-3.25*kp, 0, -2.5]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
-                translate([-3.25*kp, 0, 10]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
-            }
-            hull() {
-                translate([-3.25*kp, 21.37, -1.605]) hull() {
-                    translate([0, 2.95, 0]) rotate(90, [0, 1, 0]) cylinder(d=7.5, h=30);
-                    translate([0, -2.95, 0]) rotate(90, [0, 1, 0]) cylinder(d=7.5, h=30);
+            if (right) {
+                hull() {
+                    translate([-3.25*kp, 0, -2.5]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
+                    translate([-3.25*kp, 0, 10]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
                 }
-                translate([-3.25*kp, 21.37, 10]) hull() {
-                    translate([0, 2.95, 0]) rotate(90, [0, 1, 0]) cylinder(d=7.5, h=30);
-                    translate([0, -2.95, 0]) rotate(90, [0, 1, 0]) cylinder(d=7.5, h=30);
+            } else {
+                hull() {
+                    translate([3.25*kp, 0, -2.5]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
+                    translate([3.25*kp, 0, 10]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
+                }
+            }
+            if (right) {
+                hull() {
+                    translate([3.25*kp, 21.37, -1.605]) hull() {
+                        translate([0, 2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                        translate([0, -2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                    }
+                    translate([3.25*kp, 21.37, 10]) hull() {
+                        translate([0, 2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                        translate([0, -2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                    }
                 }
             }
         }
     }
 }
 
-module case() {
+translate([10, 0, 0]) {
     upper_case();
     translate([0, 0, h - 6.6 - 1.5]) plate();
-    translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb();
-    lower_case();
+    translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(true);
+    lower_case(true);
 }
 
-translate([10, 0, 0]) case();
-translate([-10, 0, 0]) mirror([1, 0, 0]) case();
+translate([-10-l, 0, 0]) {
+    upper_case();
+    translate([0, 0, h - 6.6 - 1.5]) plate();
+    translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(false);
+    lower_case(false);
+}
