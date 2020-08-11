@@ -252,7 +252,7 @@
   (module Phone_Connector:MJ-4PP-9 (layer B.Cu) (tedit 5F3169A3) (tstamp 5F32C9E2)
     (at -2 38.4 270)
     (path /5F248BA8)
-    (fp_text reference J3 (at 0 -1 270) (layer B.SilkS)
+    (fp_text reference J3 (at 0 -6.8 270) (layer B.SilkS)
       (effects (font (size 1 1) (thickness 0.12)) (justify mirror))
     )
     (fp_text value AudioJack4 (at 0 1.5 90) (layer B.Fab) hide
@@ -281,7 +281,7 @@
   (module Phone_Connector:MJ-4PP-9 (layer B.Cu) (tedit 5F3169A3) (tstamp 5F31AF66)
     (at 117.2 38.4 90)
     (path /5F192896)
-    (fp_text reference J2 (at 0 -1 90) (layer B.SilkS)
+    (fp_text reference J2 (at 0 -6.8 90) (layer B.SilkS)
       (effects (font (size 1 1) (thickness 0.12)) (justify mirror))
     )
     (fp_text value AudioJack4 (at 0 1.5 -90) (layer B.Fab) hide
@@ -1254,10 +1254,10 @@
       (net 8 GND))
   )
 
-  (module SMD:2012M (layer B.Cu) (tedit 5F1C4E3E) (tstamp 5F31B28A)
+  (module SMD:2012M (layer B.Cu) (tedit 5F1C4E3E) (tstamp 5F32DFEB)
     (at 101.79 14.78)
     (path /5F1C960F)
-    (fp_text reference R4 (at 0 -1.5) (layer B.SilkS)
+    (fp_text reference R4 (at 0 1.52) (layer B.SilkS)
       (effects (font (size 0.8 0.8) (thickness 0.1)) (justify mirror))
     )
     (fp_text value 5.1k (at 0 1.5) (layer B.Fab) hide
@@ -1269,10 +1269,10 @@
       (net 8 GND))
   )
 
-  (module SMD:2012M (layer B.Cu) (tedit 5F1C4E3E) (tstamp 5F31E8D6)
+  (module SMD:2012M (layer B.Cu) (tedit 5F1C4E3E) (tstamp 5F32E2EF)
     (at 96 15.48)
     (path /5F1EAAD8)
-    (fp_text reference R3 (at 0 -1.5) (layer B.SilkS)
+    (fp_text reference R3 (at -3 0) (layer B.SilkS)
       (effects (font (size 0.8 0.8) (thickness 0.1)) (justify mirror))
     )
     (fp_text value 22 (at 0 1.5) (layer B.Fab) hide
@@ -1284,10 +1284,10 @@
       (net 18 D-))
   )
 
-  (module SMD:2012M (layer B.Cu) (tedit 5F1C4E3E) (tstamp 5F1CBA2B)
+  (module SMD:2012M (layer B.Cu) (tedit 5F1C4E3E) (tstamp 5F32E34F)
     (at 96 18.58)
     (path /5F1EAAD2)
-    (fp_text reference R2 (at 0 -1.5) (layer B.SilkS)
+    (fp_text reference R2 (at -3 0) (layer B.SilkS)
       (effects (font (size 0.8 0.8) (thickness 0.1)) (justify mirror))
     )
     (fp_text value 22 (at 0 1.5) (layer B.Fab) hide
@@ -1299,10 +1299,10 @@
       (net 17 D+))
   )
 
-  (module SMD:2012M (layer B.Cu) (tedit 5F1C4E3E) (tstamp 5F1CA21B)
+  (module SMD:2012M (layer B.Cu) (tedit 5F1C4E3E) (tstamp 5F32DD0C)
     (at 70.4 12.73 270)
     (path /5F2EF1AF)
-    (fp_text reference R1 (at 0 -1.5 90) (layer B.SilkS)
+    (fp_text reference R1 (at 0 1.5 90) (layer B.SilkS)
       (effects (font (size 0.8 0.8) (thickness 0.1)) (justify mirror))
     )
     (fp_text value 10k (at 0 1.5 90) (layer B.Fab) hide
