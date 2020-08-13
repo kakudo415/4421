@@ -235,3 +235,5 @@ translate([-10-l, 0, 0]) {
     translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(false);
     lower_case(false);
 }
+
+// !PLATE();
