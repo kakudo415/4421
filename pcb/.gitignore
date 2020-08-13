@@ -25,5 +25,8 @@ fp-info-cache
 *.xml
 *.csv
 
+/gerber
+gerber.zip
+
 # Gerber To Orger PLUGIN
 /gerber_to_order
