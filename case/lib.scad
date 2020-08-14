@@ -43,7 +43,7 @@ module chamfered_square(size, c) {
 
 // Continuous 90' Corner
 module continuous_corner(r, a = 90, circle_a=45) {
-    n = $fn;
+    n = ceil($fn * circle_a / 360);
     clothoid_a = (a - circle_a) / 2;
     l = sqrt(degree2radian(clothoid_a * 2));
 

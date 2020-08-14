@@ -7,8 +7,15 @@ kp = 19.2;
 l = kp * 6.5;
 w = kp * 5.5;
 h = 25;
-ch = h - 6.6 - 1.5 - 5 - 1.6 - 1.605 + 7.5 / 2;
 c = [l, w, 0] / 2;
+
+ch = h
+    - 6.6 // Key wall
+    - 1.5 // Plate
+    - 5   // Plate-PCB gap
+    - 1.6 // PCB
+    - 3.21 / 2 // USB receptacle 
+    + 7.5 / 2; // Max USB plug height
 
 // SKETCHES
 
@@ -74,8 +81,8 @@ module SCREW_COUNTERBORE() {
 
 module KEY_HOLE() {
     square([14, 14], center=true);
-    translate([0, 4.9]) square([16, 4.2], center=true);
-    translate([0, -4.9]) square([16, 4.2], center=true);
+    translate([0, 5]) smooth(0.3) square([16, 4], center=true);
+    translate([0, -5]) smooth(0.3) square([16, 4], center=true);
 }
 
 module PLATE() {
