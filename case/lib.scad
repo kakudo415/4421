@@ -1,3 +1,13 @@
+module x(v) {
+    translate([v, 0, 0]) children();
+}
+module y(v) {
+    translate([0, v, 0]) children();
+}
+module z(v) {
+    translate([0, 0, v]) children();
+}
+
 function cubic_bezier(t, p0, p1, p2, p3) = pow(1-t, 3)*p0 + 3*pow(1-t, 2)*t*p1 + 3*(1-t)*pow(t, 2)*p2 + pow(t, 3)*p3;
 
 function clothoid(t) = [cos_radian(t * t / 2), sin_radian(t * t / 2)];
@@ -43,7 +53,7 @@ module chamfered_square(size, c) {
 
 // Continuous 90' Corner
 module continuous_corner(r, a = 90, circle_a=45) {
-    n = ceil($fn * circle_a / 360);
+    n = round($fn * circle_a / 360 * 2);
     clothoid_a = (a - circle_a) / 2;
     l = sqrt(degree2radian(clothoid_a * 2));
 

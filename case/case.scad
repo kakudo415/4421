@@ -1,6 +1,6 @@
 include <lib.scad>;
 
-$fn = 64;
+$fn = 16;
 
 kp = 19.2;
 
@@ -14,8 +14,7 @@ ch = h
     - 1.5 // Plate
     - 5   // Plate-PCB gap
     - 1.6 // PCB
-    - 3.21 / 2 // USB receptacle 
-    + 7.5 / 2; // Max USB plug height
+    - 3.21 / 2; // USB receptacle
 
 // SKETCHES
 
@@ -52,17 +51,17 @@ module UPPER_CASE_CUTOUT() {
 module PLATE_RECESS() {
     translate(c) fillet(1) {
         smooth(3) square(kp*[6, 4]+[4, 4], center=true);
-        translate([1.25*kp, 0]) smooth(2.5) square([1.5, 4]*kp+[2, 12], center=true);
-        translate([-1.25*kp, 0]) smooth(2.5) square([1.5, 4]*kp+[2, 12], center=true);
+        translate([1.25*kp, 0]) smooth(2) square([1.5*kp+2, (2 + 1.5/4)*kp*2], center=true);
+        translate([-1.25*kp, 0]) smooth(2) square([1.5*kp+2, (2 + 1.5/4)*kp*2], center=true);
     }
 }
 
 module SCREW_HOLE() {
     translate(c) {
         for (i = [-1:1]) {
-            translate([kp*2.5*i, 0]) {
-                translate([0, w/2-(w-kp*4-4)/4]) circle(d=3.4);
-                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=3.4);
+            x(kp*2.5*i) {
+                y((2 + 1.5/4)*kp) circle(d=3.4);
+                y(-(2 + 1.5/4)*kp) circle(d=3.4);
             }
         }
     }
@@ -71,9 +70,40 @@ module SCREW_HOLE() {
 module SCREW_COUNTERBORE() {
     translate(c) {
         for (i = [-1:1]) {
-            translate([kp*2.5*i, 0]) {
-                translate([0, w/2-(w-kp*4-4)/4]) circle(d=6);
-                translate([0, -w/2+(w-kp*4-4)/4]) circle(d=6);
+            x(kp*2.5*i) {
+                y((2 + 1.5/4)*kp) circle(d=6);
+                y(-(2 + 1.5/4)*kp) circle(d=6);
+            }
+        }
+    }
+}
+
+module HEXAGON_NUT_HOLE(S) {
+    r = S / 2 / cos(30);
+    p = [for (t = [0 : 60 : 300]) [cos(t), sin(t)] * r];
+    union() {
+        polygon(p);
+        hull() {
+            translate(p[0]) circle(d=1);
+            translate(p[3]) circle(d=1);
+        }
+        hull() {
+            translate(p[1]) circle(d=1);
+            translate(p[4]) circle(d=1);
+        }
+        hull() {
+            translate(p[2]) circle(d=1);
+            translate(p[5]) circle(d=1);
+        }
+    }
+}
+
+module HEXAGON_NUT_HOLES(S) {
+    translate(c) {
+        for (i = [-1:1]) {
+            x(kp*2.5*i) {
+                y((2 + 1.5/4)*kp) HEXAGON_NUT_HOLE(S);
+                y(-(2 + 1.5/4)*kp) HEXAGON_NUT_HOLE(S);
             }
         }
     }
@@ -100,13 +130,22 @@ module PLATE() {
 }
 
 module PLATE_STAY() {
-    for (i = [-1, 1], j = [-1, 1]) {
-        translate(c+[1.25*kp*i, (2*kp+3.5)*j]) {
-            hull() {
-                translate([-0.75*kp+1.5, 0]) circle(d=3);
-                translate([0.75*kp-1.5, 0]) circle(d=3);
-            }
+    hull() {
+        y(1.5/4*kp - 3.5 - 0.5 - 1.5) {
+            x(0.75*kp-1) circle(d=3);
+            x(-0.75*kp+1) circle(d=3);
         }
+        x(0.75*kp-1) circle(d=3);
+        x(-0.75*kp+1) circle(d=3);
+    }
+}
+
+module PLATE_STAYS() {
+    translate(c) {
+        translate([1.25*kp, 2*kp+3.5]) PLATE_STAY();
+        translate([-1.25*kp, 2*kp+3.5]) PLATE_STAY();
+        translate([1.25*kp, -2*kp-3.5]) rotate(180) PLATE_STAY();
+        translate([-1.25*kp, -2*kp-3.5]) rotate(180) PLATE_STAY();
     }
 }
 
@@ -189,7 +228,18 @@ module upper_case(right) {
         }
         linear_extrude(h - 6.6 + 1) PLATE_RECESS();
         linear_extrude(h) SCREW_HOLE();
-        translate([0, 0, h-5]) linear_extrude(5) SCREW_COUNTERBORE();
+        translate([0, 0, h-4]) linear_extrude(4) SCREW_COUNTERBORE();
+        translate(c+[0, 0, ch]) {
+            if (right) {
+                translate([-3.25*kp, 0, 0]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
+            } else {
+                translate([3.25*kp, 0, 0]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
+            }
+            translate([3.25*kp, 21.37, 0]) hull() {
+                translate([0, 2.925, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                translate([0, -2.925, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+            }
+        }
         linear_extrude(ch) square([l, w]);
     }
 }
@@ -198,10 +248,10 @@ module lower_case(right) {
     color("ivory") render(4) difference() {
         union() {
             linear_extrude(ch) CASE_OUTER();
-            linear_extrude(h - 6.6 - 1.5 - 1) PLATE_STAY();
+            linear_extrude(h - 6.6 - 1.5 - 1) PLATE_STAYS();
         }
         linear_extrude(h) SCREW_HOLE();
-        linear_extrude(5) SCREW_COUNTERBORE();
+        linear_extrude(3) HEXAGON_NUT_HOLES(5.5);
         translate([0, 0, 3]) linear_extrude(ch - 3) CASE_INNER();
         translate(c+[0, 0, h - 6.6 - 1.5 - 5 - 1.6]) {
             if (right) {
@@ -215,15 +265,9 @@ module lower_case(right) {
                     translate([3.25*kp, 0, 10]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
                 }
             }
-            hull() {
-                translate([3.25*kp, 21.37, -1.605]) hull() {
-                    translate([0, 2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                    translate([0, -2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                }
-                translate([3.25*kp, 21.37, 10]) hull() {
-                    translate([0, 2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                    translate([0, -2.95, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                }
+            translate([3.25*kp, 21.37, -1.605]) hull() {
+                translate([0, 2.925, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                translate([0, -2.925, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
             }
         }
     }
