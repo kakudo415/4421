@@ -1,6 +1,6 @@
 include <lib.scad>;
 
-$fn = 16;
+$fn = 64;
 
 kp = 19.2;
 
@@ -51,8 +51,8 @@ module UPPER_CASE_CUTOUT() {
 module PLATE_RECESS() {
     translate(c) fillet(1) {
         smooth(3) square(kp*[6, 4]+[4, 4], center=true);
-        translate([1.25*kp, 0]) smooth(2) square([1.5*kp+2, (2 + 1.5/4)*kp*2], center=true);
-        translate([-1.25*kp, 0]) smooth(2) square([1.5*kp+2, (2 + 1.5/4)*kp*2], center=true);
+        x(1.25*kp) smooth(2) square([1.5*kp+2, (2 + 1.5/4)*kp*2], center=true);
+        x(-1.25*kp) smooth(2) square([1.5*kp+2, (2 + 1.5/4)*kp*2], center=true);
     }
 }
 
@@ -111,8 +111,8 @@ module HEXAGON_NUT_HOLES(S) {
 
 module KEY_HOLE() {
     square([14, 14], center=true);
-    translate([0, 5]) smooth(0.3) square([16, 4], center=true);
-    translate([0, -5]) smooth(0.3) square([16, 4], center=true);
+    y(5) smooth(0.3) square([16, 4], center=true);
+    y(-5) smooth(0.3) square([16, 4], center=true);
 }
 
 module PLATE() {
@@ -120,8 +120,8 @@ module PLATE() {
     translate(c) difference() {
         fillet(1) {
             smooth(2) square(kp*[6, 4]+[2, 2], center=true);
-            translate([1.25*kp, 0]) smooth(1.5) square([1.5, 4]*kp+[0, 10], center=true);
-            translate([-1.25*kp, 0]) smooth(1.5) square([1.5, 4]*kp+[0, 10], center=true);
+            x(1.25*kp) smooth(1.5) square([1.5, 4]*kp+[0, 10], center=true);
+            x(-1.25*kp) smooth(1.5) square([1.5, 4]*kp+[0, 10], center=true);
         }
         for (key_position = key_positions) {
             translate(key_position) KEY_HOLE();
@@ -157,51 +157,47 @@ module PCB() {
 
 module mj4pp9() {
     color("dimgray") difference() {
-        union() {
-            translate([0, 6.05-14.10, 2.5]) cube([6, 12.10, 5], center=true);
-            translate([0, 0, 2.5]) rotate(90, [1, 0, 0]) cylinder(d=5, h=14.10);
+        union() z(2.5) {
+            y(6.05-14.10) cube([6, 12.10, 5], center=true);
+            rotate(90, [1, 0, 0]) cylinder(d=5, h=14.10);
         }
         translate([0, 50, 2.5]) rotate(90, [1, 0, 0]) cylinder(d=3.6, h=100);
     }
 }
 
 module type_c_31_m_12() {
-    color("silver") translate([0, 0, 1.605]) {
+    color("silver") z(1.605) {
         difference() {
             hull() {
-                translate([4.47-1.605, 0, 0]) rotate(90, [1, 0, 0]) cylinder(d=3.21, h=7.30);
-                translate(-[4.47-1.605, 0, 0]) rotate(90, [1, 0, 0]) cylinder(d=3.21, h=7.30);
+                x(4.47-1.605) rotate(90, [1, 0, 0]) cylinder(d=3.21, h=7.30);
+                x(-4.47+1.605) rotate(90, [1, 0, 0]) cylinder(d=3.21, h=7.30);
             }
             translate([0, 1, 0]) hull() {
-                translate([4.47-1.605, 0, 0]) rotate(90, [1, 0, 0]) cylinder(d=2.56, h=7.30);
-                translate(-[4.47-1.605, 0, 0]) rotate(90, [1, 0, 0]) cylinder(d=2.56, h=7.30);
+                x(4.47-1.605) rotate(90, [1, 0, 0]) cylinder(d=2.56, h=7.30);
+                x(-4.47+1.605) rotate(90, [1, 0, 0]) cylinder(d=2.56, h=7.30);
             }
         }
-        translate([0, -4.15, 0]) cube([6.49, 6.30, 0.7], center=true);
+        y(-4.15) cube([6.49, 6.30, 0.7], center=true);
     }
 }
 
 module pcb(right) {
     color("darkgreen") linear_extrude(1.6) PCB();
-    translate(c+[0, 0, -5]) {
+    translate(c) z(-5) {
         if (right) {
-            translate([-kp*3-2, 0]) rotate(90) mj4pp9();
+            x(-kp*3-2) rotate(90) mj4pp9();
         } else {
-            translate([kp*3+2, 0]) rotate(270) mj4pp9();
+            x(kp*3+2) rotate(270) mj4pp9();
         }
     }
-    translate(c+[0, 0, -3.21]) {
+    translate(c) z(-3.21) {
         translate([kp*3, 21.37]) rotate(270) type_c_31_m_12();
     }
 }
 
 module gasket() {
     color("black") {
-        translate([0, 0, -1]) hull() {
-            translate([-0.75*kp+1.5, 0]) cylinder(d=3, h=1);
-            translate([0.75*kp-1.5, 0]) cylinder(d=3, h=1);
-        }
-        translate([0, 0, 1.5]) hull() {
+        for (i = [-1, 1.5]) z(i) hull() {
             translate([-0.75*kp+1.5, 0]) cylinder(d=3, h=1);
             translate([0.75*kp-1.5, 0]) cylinder(d=3, h=1);
         }
@@ -228,16 +224,16 @@ module upper_case(right) {
         }
         linear_extrude(h - 6.6 + 1) PLATE_RECESS();
         linear_extrude(h) SCREW_HOLE();
-        translate([0, 0, h-4]) linear_extrude(4) SCREW_COUNTERBORE();
-        translate(c+[0, 0, ch]) {
+        z(h-4) linear_extrude(4) SCREW_COUNTERBORE();
+        translate(c) z(ch) {
             if (right) {
-                translate([-3.25*kp, 0, 0]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
+                x(-3.25*kp) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
             } else {
-                translate([3.25*kp, 0, 0]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
+                x(3.25*kp) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
             }
             translate([3.25*kp, 21.37, 0]) hull() {
-                translate([0, 2.925, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                translate([0, -2.925, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                y(, 2.925) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                y(-2.925) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
             }
         }
         linear_extrude(ch) square([l, w]);
@@ -252,8 +248,8 @@ module lower_case(right) {
         }
         linear_extrude(h) SCREW_HOLE();
         linear_extrude(3) HEXAGON_NUT_HOLES(5.5);
-        translate([0, 0, 3]) linear_extrude(ch - 3) CASE_INNER();
-        translate(c+[0, 0, h - 6.6 - 1.5 - 5 - 1.6]) {
+        z(3) linear_extrude(ch - 3) CASE_INNER();
+        translate(c) z(h - 6.6 - 1.5 - 5 - 1.6) {
             if (right) {
                 hull() {
                     translate([-3.25*kp, 0, -2.5]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
@@ -266,21 +262,21 @@ module lower_case(right) {
                 }
             }
             translate([3.25*kp, 21.37, -1.605]) hull() {
-                translate([0, 2.925, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
-                translate([0, -2.925, 0]) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                y(2.925) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
+                y(-2.925) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
             }
         }
     }
 }
 
-translate([10, 0, 0]) {
+x(10) {
     upper_case(true);
     translate([0, 0, h - 6.6 - 1.5]) plate();
     translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(true);
     lower_case(true);
 }
 
-translate([-10-l, 0, 0]) {
+x(-10-l) {
     upper_case(false);
     translate([0, 0, h - 6.6 - 1.5]) plate();
     translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(false);
