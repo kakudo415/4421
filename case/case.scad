@@ -224,7 +224,7 @@ module upper_case(right) {
         }
         linear_extrude(h - 6.6 + 1) PLATE_RECESS();
         linear_extrude(h) SCREW_HOLE();
-        z(h-4) linear_extrude(4) SCREW_COUNTERBORE();
+        z(h-5) linear_extrude(5) SCREW_COUNTERBORE();
         translate(c) z(ch) {
             if (right) {
                 x(-3.25*kp) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
@@ -247,7 +247,7 @@ module lower_case(right) {
             linear_extrude(h - 6.6 - 1.5 - 1) PLATE_STAYS();
         }
         linear_extrude(h) SCREW_HOLE();
-        linear_extrude(3) HEXAGON_NUT_HOLES(5.5);
+        linear_extrude(3) HEXAGON_NUT_HOLES(5.5+0.4);
         z(3) linear_extrude(ch - 3) CASE_INNER();
         translate(c) z(h - 6.6 - 1.5 - 5 - 1.6) {
             if (right) {
