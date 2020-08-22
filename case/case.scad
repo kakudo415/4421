@@ -80,21 +80,15 @@ module SCREW_COUNTERBORE() {
 
 module HEXAGON_NUT_HOLE(S) {
     r = S / 2 / cos(30);
-    p = [for (t = [0 : 60 : 300]) [cos(t), sin(t)] * r];
-    union() {
-        polygon(p);
-        hull() {
-            translate(p[0]) circle(d=1);
-            translate(p[3]) circle(d=1);
-        }
-        hull() {
-            translate(p[1]) circle(d=1);
-            translate(p[4]) circle(d=1);
-        }
-        hull() {
-            translate(p[2]) circle(d=1);
-            translate(p[5]) circle(d=1);
-        }
+    p = [
+        [0, 0],
+        [r, 0],
+        [r, 0] + [cos(60), sin(60)] * r / 3,
+        [r, 0] + [cos(120), sin(120)] * r / 3,
+        [cos(60), sin(60)] * r,
+    ];
+    for (t = [0 : 5]) {
+        rotate(60 * t) polygon(p);
     }
 }
 
@@ -247,7 +241,7 @@ module lower_case(right) {
             linear_extrude(h - 6.6 - 1.5 - 1) PLATE_STAYS();
         }
         linear_extrude(h) SCREW_HOLE();
-        linear_extrude(3) HEXAGON_NUT_HOLES(5.5+0.4);
+        linear_extrude(3) HEXAGON_NUT_HOLES(5.5);
         z(3) linear_extrude(ch - 3) CASE_INNER();
         translate(c) z(h - 6.6 - 1.5 - 5 - 1.6) {
             if (right) {
