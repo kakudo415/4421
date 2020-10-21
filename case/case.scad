@@ -12,6 +12,7 @@ c = [l, w, 0] / 2;
 ch = h
     - 6.6 // Key wall
     - 1.5 // Plate
+    + 1.5 // Switch & Plate overlapping
     - 5   // Plate-PCB gap
     - 1.6 // PCB
     - 3.21 / 2; // USB receptacle
@@ -243,19 +244,19 @@ module lower_case(right) {
         linear_extrude(h) SCREW_HOLE();
         linear_extrude(3) HEXAGON_NUT_HOLES(5.5);
         z(3) linear_extrude(ch - 3) CASE_INNER();
-        translate(c) z(h - 6.6 - 1.5 - 5 - 1.6) {
+        translate(c) z(ch) {
             if (right) {
                 hull() {
-                    translate([-3.25*kp, 0, -2.5]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
+                    translate([-3.25*kp, 0, -(5-3.21)]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
                     translate([-3.25*kp, 0, 10]) rotate(90, [0, 1, 0]) cylinder(d=8, h=30);
                 }
             } else {
                 hull() {
-                    translate([3.25*kp, 0, -2.5]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
+                    translate([3.25*kp, 0, -(5-3.21)]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
                     translate([3.25*kp, 0, 10]) rotate(270, [0, 1, 0]) cylinder(d=8, h=30);
                 }
             }
-            translate([3.25*kp, 21.37, -1.605]) hull() {
+            translate([3.25*kp, 21.37, 0]) hull() {
                 y(2.925) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
                 y(-2.925) rotate(270, [0, 1, 0]) cylinder(d=7.5, h=30);
             }
@@ -266,14 +267,14 @@ module lower_case(right) {
 x(10) {
     upper_case(true);
     translate([0, 0, h - 6.6 - 1.5]) plate();
-    translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(true);
+    translate([0, 0, h - 6.6 - 5 - 1.6]) pcb(true);
     lower_case(true);
 }
 
 x(-10-l) {
     upper_case(false);
     translate([0, 0, h - 6.6 - 1.5]) plate();
-    translate([0, 0, h - 6.6 - 1.5 - 5 - 1.6]) pcb(false);
+    translate([0, 0, h - 6.6 - 5 - 1.6]) pcb(false);
     lower_case(false);
 }
 
