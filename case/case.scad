@@ -43,9 +43,9 @@ module CASE_INNER() {
 
 module UPPER_CASE_CUTOUT() {
     translate(c) smooth(1) fillet(1) difference() {
-        square(kp*[6, 4], center=true);
-        translate([2, -2]*kp) square(kp*[1, 1]);
-        translate([-1, -2]*kp) square(kp*[1, 1]);
+        square(kp*[6, 4] + [2, 2], center=true);
+        translate([2, -2]*kp + [1, -1]) square(kp*[1, 1]);
+        translate([-1, -2]*kp + [1, -1]) square(kp*[1, 1]-[2, 0]);
     }
 }
 
